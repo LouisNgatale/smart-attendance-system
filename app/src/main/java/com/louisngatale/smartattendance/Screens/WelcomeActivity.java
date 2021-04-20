@@ -11,16 +11,22 @@ import com.louisngatale.smartattendance.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    Button signIn,Register;
+    Button register,signIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        register = findViewById(R.id.register);
         signIn = findViewById(R.id.sign_in);
 
-        signIn.setOnClickListener((View v) -> {
+        register.setOnClickListener((View v) -> {
             Intent signInIntent = new Intent(WelcomeActivity.this,StudentSignInActivity.class);
+            startActivity(signInIntent);
+        });
+
+        signIn.setOnClickListener(v -> {
+            Intent signInIntent = new Intent(WelcomeActivity.this,Login.class);
             startActivity(signInIntent);
         });
     }
