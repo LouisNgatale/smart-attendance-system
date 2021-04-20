@@ -6,42 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Screens.WelcomeActivity">
 
-    <TextView
-        android:id="@+id/first"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="64dp"
-        android:text="@string/smart"
-        android:textColor="@color/black"
-        android:textSize="26sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
-        android:fontFamily="sans-serif"
-        android:text="@string/attendance"
-        android:textColor="@color/blue"
-        android:textSize="26sp"
-        app:layout_constraintStart_toEndOf="@+id/first"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/third"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
-        android:text="@string/system"
-        android:textColor="@color/black"
-        android:textSize="26sp"
-        app:layout_constraintStart_toEndOf="@+id/second"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/background"
@@ -51,14 +16,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/second"
+        app:layout_constraintTop_toBottomOf="@+id/title"
         app:srcCompat="@drawable/loginbg"
         tools:ignore="ContentDescription" />
 
     <Button
         android:id="@+id/sign_in"
         android:layout_width="224dp"
-        android:layout_height="40sp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/sign_in"
         android:fontFamily="@font/poppins_light"
@@ -70,7 +35,7 @@
     <Button
         android:id="@+id/register"
         android:layout_width="224dp"
-        android:layout_height="40sp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/light_blue"
         android:text="@string/register"
@@ -91,4 +56,52 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/smart"
+            android:textColor="@color/black"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/attendance"
+            android:textColor="@color/blue"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/first"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/third"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/system"
+            android:textColor="@color/black"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/second"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
