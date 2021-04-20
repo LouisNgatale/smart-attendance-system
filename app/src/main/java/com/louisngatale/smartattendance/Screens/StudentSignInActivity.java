@@ -3,6 +3,7 @@ package com.louisngatale.smartattendance.Screens;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,9 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.Result;
 import com.louisngatale.smartattendance.R;
 
@@ -23,10 +27,13 @@ public class StudentSignInActivity extends AppCompatActivity {
     private CodeScanner mCodeScanner;
     String fullName,id,course;
     Button proceed;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_sign_in);
+        mAuth = FirebaseAuth.getInstance();
 
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, scannerView);
@@ -89,11 +96,13 @@ public class StudentSignInActivity extends AppCompatActivity {
         
         scannerView.setOnClickListener(view -> mCodeScanner.startPreview());
 
-
         proceed.setOnClickListener(v -> {
-            Log.d(TAG, "onCreate: " + fullName + " " + id + " " + course);
+                Intent passwordIntent = new Intent(StudentSignInActivity.this,RegisterActivity.class);
+                passwordIntent.putExtra("Full Name",fullName);
+                passwordIntent.putExtra("Id",id);
+                passwordIntent.putExtra("Course",course);
+                startActivity(passwordIntent);
         });
-
     }
 
     @Override
