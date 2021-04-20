@@ -12,5 +12,17 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+
+    </style>
+    <style name= "AppTheme" parent="Theme.SmartAttendance" >
+        <item name= "android:textViewStyle"> @style/PoppinsTextViewStyle </item>
+        <item name= "android:buttonStyle"> @style/PoppinsButtonStyle </item>
+    </style>
+    <style name= "PoppinsTextViewStyle" parent= "android:Widget.TextView" >
+        <item name= "android:fontFamily"> @font/poppins_regular </item>
+    </style>
+    <style name= "PoppinsButtonStyle" parent= "android:Widget.Holo.Button" >
+        <item name= "android:fontFamily"> @font/poppins_light </item>
     </style>
 </resources>

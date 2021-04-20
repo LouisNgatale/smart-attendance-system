@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="64dp"
         android:text="@string/smart"
         android:textColor="@color/black"
         android:textSize="26sp"
@@ -23,7 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="64dp"
+        android:fontFamily="sans-serif"
         android:text="@string/attendance"
         android:textColor="@color/blue"
         android:textSize="26sp"
@@ -35,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="64dp"
         android:text="@string/system"
         android:textColor="@color/black"
         android:textSize="26sp"
@@ -55,25 +56,39 @@
         tools:ignore="ContentDescription" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/sign_in"
         android:layout_width="224dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40sp"
         android:layout_marginTop="16dp"
         android:text="@string/sign_in"
+        android:fontFamily="@font/poppins_light"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/background" />
 
     <Button
+        android:id="@+id/register"
         android:layout_width="224dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40sp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/light_blue"
-        android:textColor="@color/black"
         android:text="@string/register"
         android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_in" />
+
+    <TextView
+        android:id="@+id/lecture_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/lecturer_sign_in_here"
+        android:textColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register" />
 </androidx.constraintlayout.widget.ConstraintLayout>
