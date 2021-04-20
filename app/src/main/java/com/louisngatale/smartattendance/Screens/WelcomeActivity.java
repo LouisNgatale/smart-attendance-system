@@ -7,16 +7,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.louisngatale.smartattendance.R;
+import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Student.HomeActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
-
     Button register,signIn;
+    FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        if (null != mAuth.getCurrentUser()){
+            Intent loginIntent = new Intent(WelcomeActivity.this, HomeActivity.class);
+            startActivity(loginIntent);
+        }
         register = findViewById(R.id.register);
         signIn = findViewById(R.id.sign_in);
 
