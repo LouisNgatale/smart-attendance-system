@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Smart Attendance</string>
+    <string name="smart">SMART</string>
+    <string name="attendance">ATTENDANCE</string>
+    <string name="system">SYSTEM</string>
+    <string name="app_title">SMART ATTENDANCE SYSTEM</string>
+    <string name="register">Register</string>
+    <string name="sign_in">Sign In</string>
+</resources>
