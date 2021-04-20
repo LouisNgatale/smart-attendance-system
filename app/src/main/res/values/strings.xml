@@ -7,4 +7,6 @@
     <string name="register">Register</string>
     <string name="sign_in">Sign In</string>
     <string name="lecturer_sign_in_here">Lecturer ? Sign in here</string>
+    <string name="scan_your_id_card_to_login">Scan your ID Card to login</string>
+    <string name="proceed">Proceed</string>
 </resources>
