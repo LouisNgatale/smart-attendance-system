@@ -18,6 +18,8 @@ import com.louisngatale.smartattendance.R;
 import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Student.CourseView;
 import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Student.ScanAttendance;
 
+import java.util.Date;
+
 public class TeacherCourseView extends AppCompatActivity {
     private static final String TAG = "Home";
     String id;
@@ -27,6 +29,7 @@ public class TeacherCourseView extends AppCompatActivity {
     Button scan;
     TextView totalStudents, currentSessions, totalSessions;
     int current = 0,students = 0;
+    String qrValue =null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,6 @@ public class TeacherCourseView extends AppCompatActivity {
         }
 
 //        Getting total current sessions
-        Log.d(TAG, "onCreate: " + course);
         db.collection("classes/"+course+"/Subjects/"+id+"/Attendance")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -94,8 +96,21 @@ public class TeacherCourseView extends AppCompatActivity {
                     }
                 });
 
+
+        Log.d(TAG, "QR: " + qrValue);
+
         scan.setOnClickListener(v -> {
-            Intent intent1 = new Intent(TeacherCourseView.this, ScanAttendance.class);
+            Intent intent1 = new Intent(TeacherCourseView.this, QrCodeGenerator.class);
+            if (qrValue == null){
+                Date date = new Date();
+                long time = date.getTime();
+                qrValue = String.valueOf(time);
+                Log.d(TAG, "QR: " + qrValue);
+                intent1.putExtra("QrValue",qrValue);
+            }else {
+                Log.d(TAG, "QR: " + qrValue);
+                intent1.putExtra("QrValue",qrValue);
+            }
             startActivity(intent1);
         });
 
