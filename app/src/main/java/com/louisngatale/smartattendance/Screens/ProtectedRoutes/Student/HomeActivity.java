@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import com.google.firebase.firestore.Query;
 import com.louisngatale.smartattendance.Adapter.CoursesAdapter;
 import com.louisngatale.smartattendance.Data.Courses;
 import com.louisngatale.smartattendance.R;
+import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Teacher.TeacherHome;
+import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Teacher.TeacherLogin;
 import com.louisngatale.smartattendance.Screens.WelcomeActivity;
 
 public class HomeActivity extends AppCompatActivity {
@@ -45,6 +48,26 @@ public class HomeActivity extends AppCompatActivity {
             Intent loginIntent = new Intent(HomeActivity.this, WelcomeActivity.class);
             startActivity(loginIntent);
         }
+        String uid = mAuth.getCurrentUser().getUid();
+
+        DocumentReference docRef = db.collection("users").document(uid);
+
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                assert document != null;
+                if (document.exists()){
+                    String role = document.getString("role");
+                    assert role != null;
+                    if (role.equals("Teacher")){
+                        Intent intent = new Intent(HomeActivity.this, TeacherHome.class);
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+
+
 
         initializeViews();
         retrieveFromFirestore();

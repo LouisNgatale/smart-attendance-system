@@ -21,6 +21,7 @@ import com.louisngatale.smartattendance.Screens.Login;
 import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Student.HomeActivity;
 
 public class TeacherLogin extends AppCompatActivity {
+    private static final String TAG = "Home";
     EditText password,email;
     Button signUp;
     FirebaseAuth mAuth;
@@ -53,9 +54,11 @@ public class TeacherLogin extends AppCompatActivity {
                         if (document.exists()){
                             String fullName = document.getString("fullName");
                             String role = document.getString("role");
+                            Log.d(TAG, "onCreate: " + role);
                             if (role.equals("Teacher")){
                                 Intent intent = new Intent(TeacherLogin.this, TeacherHome.class);
                                 progressIndicator.setVisibility(View.GONE);
+                                intent.putExtra("fullName", fullName);
                                 startActivity(intent);
                             }else {
                                 Intent intent = new Intent(TeacherLogin.this, HomeActivity.class);
