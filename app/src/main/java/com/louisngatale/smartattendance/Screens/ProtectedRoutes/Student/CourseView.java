@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,14 +22,16 @@ import com.louisngatale.smartattendance.Screens.RegisterActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubjectView extends AppCompatActivity {
+public class CourseView extends AppCompatActivity {
     private static final String TAG = "Home";
     String id;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
     String course;
+    Button scan;
     TextView percentage, totalAttended, totalSessions;
     int count = 0,days;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,7 @@ public class SubjectView extends AppCompatActivity {
         percentage = findViewById(R.id.percentage);
         totalAttended = findViewById(R.id.totalAttended);
         totalSessions = findViewById(R.id.totalSessions);
+        scan = findViewById(R.id.scanId);
 
         Intent intent = getIntent();
         if (null != intent){
@@ -78,7 +82,9 @@ public class SubjectView extends AppCompatActivity {
                     }
                 });
 
-
-
+        scan.setOnClickListener(v -> {
+            Intent intent1 = new Intent(CourseView.this,ScanAttendance.class);
+            startActivity(intent1);
+        });
     }
 }

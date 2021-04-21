@@ -9,17 +9,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.louisngatale.smartattendance.Adapter.CoursesAdapter;
 import com.louisngatale.smartattendance.Data.Courses;
 import com.louisngatale.smartattendance.R;
@@ -120,7 +117,7 @@ public class HomeActivity extends AppCompatActivity {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Intent viewItem = new Intent(this, SubjectView.class);
+            Intent viewItem = new Intent(this, CourseView.class);
             viewItem.putExtra("Id", id);
             viewItem.putExtra("Course", course);
             startActivity(viewItem);
