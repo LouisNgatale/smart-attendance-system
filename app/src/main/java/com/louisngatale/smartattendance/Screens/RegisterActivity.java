@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.louisngatale.smartattendance.R;
 import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Student.HomeActivity;
@@ -63,6 +64,18 @@ public class RegisterActivity extends AppCompatActivity {
                 confirmPassword.setError("Password does not match");
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (null != currentUser){
+            Intent loginIntent = new Intent(RegisterActivity.this, HomeActivity.class);
+            startActivity(loginIntent);
+        }
     }
 
     private void createUser(String pwd, String email) {

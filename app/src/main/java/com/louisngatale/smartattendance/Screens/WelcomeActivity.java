@@ -19,12 +19,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        mAuth = FirebaseAuth.getInstance();
 
-        if (null != mAuth.getCurrentUser()){
-            Intent loginIntent = new Intent(WelcomeActivity.this, HomeActivity.class);
-            startActivity(loginIntent);
-        }
         register = findViewById(R.id.register);
         signIn = findViewById(R.id.sign_in);
 
@@ -37,5 +32,16 @@ public class WelcomeActivity extends AppCompatActivity {
             Intent signInIntent = new Intent(WelcomeActivity.this,Login.class);
             startActivity(signInIntent);
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+
+        if (null != mAuth.getCurrentUser()){
+            Intent homeIntent = new Intent(WelcomeActivity.this, HomeActivity.class);
+            startActivity(homeIntent);
+        }
     }
 }

@@ -29,14 +29,8 @@ public class Login extends AppCompatActivity {
         password = findViewById(R.id.passwordValueLogin);
         email = findViewById(R.id.emailValueLogin);
         signUp = findViewById(R.id.login);
-        mAuth = FirebaseAuth.getInstance();
         progressIndicator = findViewById(R.id.loginLoading);
-        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if (null != currentUser){
-            Intent loginIntent = new Intent(Login.this, HomeActivity.class);
-            startActivity(loginIntent);
-        }
 
         signUp.setOnClickListener(v -> {
             progressIndicator.setVisibility(View.VISIBLE);
@@ -48,5 +42,17 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }).addOnFailureListener(e -> Toast.makeText(Login.this, "Couldn't log you in", Toast.LENGTH_SHORT).show());
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (null != currentUser){
+            Intent loginIntent = new Intent(Login.this, HomeActivity.class);
+            startActivity(loginIntent);
+        }
     }
 }

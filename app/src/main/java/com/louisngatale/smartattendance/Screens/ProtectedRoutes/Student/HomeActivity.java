@@ -43,16 +43,14 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        initializeViews();
-
-
-
 //        If user is not authenticated send to welcome activity
         if (currentUser == null){
             Intent loginIntent = new Intent(HomeActivity.this, WelcomeActivity.class);
             startActivity(loginIntent);
         }
 
+        initializeViews();
+        retrieveFromFirestore();
 
     }
 
@@ -60,9 +58,6 @@ public class HomeActivity extends AppCompatActivity {
         username = findViewById(R.id.fullName);
         logout = findViewById(R.id.logout);
         subjectsRecView =(RecyclerView) findViewById(R.id.subjectsRecView);
-
-        retrieveFromFirestore();
-
         logout.setOnClickListener(v ->{
             mAuth.signOut();
             Intent loginIntent = new Intent(HomeActivity.this, WelcomeActivity.class);
@@ -83,7 +78,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        adapter.stopListening();
     }
 
     private void retrieveFromFirestore() {
@@ -111,7 +105,6 @@ public class HomeActivity extends AppCompatActivity {
         Query query =
                 db.collection("/classes/"+course+"/Subjects");
 
-
         //        Configure the adapter options
         FirestoreRecyclerOptions<Courses> options =
                 new FirestoreRecyclerOptions.Builder<Courses>()
@@ -120,7 +113,6 @@ public class HomeActivity extends AppCompatActivity {
 
         adapter = new CoursesAdapter(options, this);
 
-        Log.d(TAG, "onSuccess: 4 ");
         subjectsRecView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         subjectsRecView.setAdapter(adapter);
         subjectsRecView.setNestedScrollingEnabled(false);
@@ -128,14 +120,11 @@ public class HomeActivity extends AppCompatActivity {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
             Intent viewItem = new Intent(this, SubjectView.class);
             viewItem.putExtra("Id", id);
             startActivity(viewItem);
         });
 
         adapter.startListening();
-        Log.d(TAG, "onSuccess: 4 ");
-
     }
 }
