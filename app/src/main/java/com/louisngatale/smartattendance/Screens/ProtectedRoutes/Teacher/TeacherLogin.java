@@ -54,7 +54,7 @@ public class TeacherLogin extends AppCompatActivity {
                             String fullName = document.getString("fullName");
                             String role = document.getString("role");
                             if (role.equals("Teacher")){
-                                Intent intent = new Intent(TeacherLogin.this, HomeActivity.class);
+                                Intent intent = new Intent(TeacherLogin.this, TeacherHome.class);
                                 progressIndicator.setVisibility(View.GONE);
                                 startActivity(intent);
                             }else {
