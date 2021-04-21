@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -123,6 +124,16 @@ public class HomeActivity extends AppCompatActivity {
         subjectsRecView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         subjectsRecView.setAdapter(adapter);
         subjectsRecView.setNestedScrollingEnabled(false);
+
+        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+            String id = documentSnapshot.getId();
+
+            Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
+            Intent viewItem = new Intent(this, SubjectView.class);
+            viewItem.putExtra("Id", id);
+            startActivity(viewItem);
+        });
+
         adapter.startListening();
         Log.d(TAG, "onSuccess: 4 ");
 

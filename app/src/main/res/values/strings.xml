@@ -25,4 +25,5 @@
     <string name="email">Email</string>
     <string name="fullname">FullName</string>
     <string name="login">Login</string>
+    <string name="your_subjects">Your Subjects</string>
 </resources>

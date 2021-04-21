@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.louisngatale.smartattendance.Data.Courses;
 import com.louisngatale.smartattendance.R;
 
 public class CoursesAdapter extends FirestoreRecyclerAdapter<Courses, CoursesAdapter.ViewHolder> {
     private static final String TAG = "Home";
     private  Context mContext;
+    private OnItemClickListener listener;
 
     public CoursesAdapter(FirestoreRecyclerOptions<Courses> options, Context mContext) {
         super(options);
@@ -55,6 +57,21 @@ public class CoursesAdapter extends FirestoreRecyclerAdapter<Courses, CoursesAda
             super(itemView);
             subject= itemView.findViewById(R.id.subjectName);
             imageView = itemView.findViewById(R.id.subjectIcon);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null){
+                    listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
         }
     }
+    public interface OnItemClickListener{
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
+
 }
