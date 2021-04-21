@@ -19,6 +19,8 @@ import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Student.CourseVi
 import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Student.ScanAttendance;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TeacherCourseView extends AppCompatActivity {
     private static final String TAG = "Home";
@@ -106,6 +108,8 @@ public class TeacherCourseView extends AppCompatActivity {
                 long time = date.getTime();
                 qrValue = String.valueOf(time);
                 Log.d(TAG, "QR: " + qrValue);
+                saveToDb(qrValue);
+
                 intent1.putExtra("QrValue",qrValue);
             }else {
                 Log.d(TAG, "QR: " + qrValue);
@@ -114,5 +118,14 @@ public class TeacherCourseView extends AppCompatActivity {
             startActivity(intent1);
         });
 
+    }
+
+    private void saveToDb(String qrValue) {
+        //        Getting total current sessions
+        Map<String, Object> session = new HashMap<>();
+        session.put("Active",true);
+        db.collection("classes/"+course+"/Subjects/" +id+ "/Attendance")
+                .document(qrValue)
+                .set(session);
     }
 }
