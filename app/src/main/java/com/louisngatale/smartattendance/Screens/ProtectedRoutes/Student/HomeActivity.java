@@ -122,6 +122,7 @@ public class HomeActivity extends AppCompatActivity {
 
             Intent viewItem = new Intent(this, SubjectView.class);
             viewItem.putExtra("Id", id);
+            viewItem.putExtra("Course", course);
             startActivity(viewItem);
         });
 
