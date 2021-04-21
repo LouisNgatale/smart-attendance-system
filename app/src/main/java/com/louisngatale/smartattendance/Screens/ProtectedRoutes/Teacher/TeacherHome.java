@@ -88,7 +88,7 @@ public class TeacherHome extends AppCompatActivity {
                 if (document.exists()){
                     String fullName = document.getString("fullName");
                     username.setText(fullName);
-                    course = document.getString("course");
+
                     Log.d(TAG, "retrieveFromFirestore: " + course);
                     retrieveCourses();
                 }
@@ -127,10 +127,30 @@ public class TeacherHome extends AppCompatActivity {
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
 
-            Intent viewItem = new Intent(this, CourseView.class);
-            viewItem.putExtra("Id", id);
-            viewItem.putExtra("Course", course);
-            startActivity(viewItem);
+            db.collection("users/"+uid+"/Subjects")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            QuerySnapshot snapshot = task.getResult();
+                            Log.d(TAG, "onComplete: task");
+                            if (snapshot != null){
+                                if (!snapshot.isEmpty()) {
+                                    snapshot.getDocuments().forEach(item -> {
+                                        if (item.getId().equals(id)){
+                                            String courseId = String.valueOf(item.get("course"));
+                                            Intent viewItem = new Intent(TeacherHome.this, TeacherCourseView.class);
+                                            viewItem.putExtra("Id", id);
+                                            viewItem.putExtra("Course", courseId);
+                                            startActivity(viewItem);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+
+
         });
 
         adapter.startListening();

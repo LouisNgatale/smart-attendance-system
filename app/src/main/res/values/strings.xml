@@ -27,4 +27,6 @@
     <string name="login">Login</string>
     <string name="your_subjects">Your Subjects</string>
     <string name="scan_your_id">Scan your Id</string>
+    <string name="scan">Scan</string>
+    <string name="total_sessions">Total Sessions</string>
 </resources>

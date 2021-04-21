@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartAttendance">
-        <activity android:name=".Screens.ProtectedRoutes.Teacher.TeacherHome"></activity>
+        <activity android:name=".Screens.ProtectedRoutes.Teacher.TeacherCourseView"></activity>
+        <activity android:name=".Screens.ProtectedRoutes.Teacher.TeacherHome" />
         <activity android:name=".Screens.ProtectedRoutes.Teacher.TeacherLogin" />
         <activity android:name=".Screens.ProtectedRoutes.Student.ScanAttendance" />
         <activity android:name=".Screens.ProtectedRoutes.Student.CourseView" />
