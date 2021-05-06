@@ -30,6 +30,7 @@ public class ScanAttendance extends AppCompatActivity {
         mCodeScanner.setDecodeCallback(result -> runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
             }
 
         }));
