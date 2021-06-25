@@ -43,18 +43,23 @@ public class TeacherLogin extends AppCompatActivity {
             progressIndicator.setVisibility(View.VISIBLE);
             String email = this.email.getText().toString();
             String pwd = password.getText().toString();
+
             mAuth.signInWithEmailAndPassword(email,pwd).addOnSuccessListener(authResult -> {
                 String uid = authResult.getUser().getUid();
 
                 DocumentReference docRef = db.collection("users").document(uid);
 
                 docRef.get().addOnCompleteListener(task -> {
+
+                    Toast.makeText(this, "User signed In", Toast.LENGTH_SHORT).show();
                     if (task.isSuccessful()){
                         DocumentSnapshot document = task.getResult();
+
                         if (document.exists()){
                             String fullName = document.getString("fullName");
                             String role = document.getString("role");
                             Log.d(TAG, "onCreate: " + role);
+
                             if (role.equals("Teacher")){
                                 Intent intent = new Intent(TeacherLogin.this, TeacherHome.class);
                                 progressIndicator.setVisibility(View.GONE);
@@ -65,12 +70,20 @@ public class TeacherLogin extends AppCompatActivity {
                                 progressIndicator.setVisibility(View.GONE);
                                 startActivity(intent);
                             }
+                        }else {
+                            Toast.makeText(this, "Records not found!", Toast.LENGTH_SHORT).show();
+                            progressIndicator.setVisibility(View.GONE);
                         }
                     }else {
+                        Toast.makeText(this, "Failed retrieving records!", Toast.LENGTH_SHORT).show();
+                        progressIndicator.setVisibility(View.GONE);
                     }
                 });
 
-            }).addOnFailureListener(e -> Toast.makeText(TeacherLogin.this, "Couldn't log you in", Toast.LENGTH_SHORT).show());
+            }).addOnFailureListener(e -> {
+                progressIndicator.setVisibility(View.GONE);
+                Toast.makeText(TeacherLogin.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
         });
     }
 
