@@ -140,7 +140,7 @@ public class TeacherHome extends AppCompatActivity {
                                         if (item.getId().equals(id)){
                                             String courseId = String.valueOf(item.get("course"));
                                             Intent viewItem = new Intent(TeacherHome.this, TeacherCourseView.class);
-                                            viewItem.putExtra("Id", id);
+                                            viewItem.putExtra("Id", id.trim());
                                             viewItem.putExtra("Course", courseId);
                                             startActivity(viewItem);
                                         }

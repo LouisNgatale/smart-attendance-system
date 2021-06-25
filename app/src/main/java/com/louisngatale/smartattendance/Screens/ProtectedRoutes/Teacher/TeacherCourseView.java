@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.louisngatale.smartattendance.R;
 import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Student.CourseView;
 import com.louisngatale.smartattendance.Screens.ProtectedRoutes.Student.ScanAttendance;
@@ -105,27 +107,31 @@ public class TeacherCourseView extends AppCompatActivity {
             Intent intent1 = new Intent(TeacherCourseView.this, QrCodeGenerator.class);
             if (qrValue == null){
                 Date date = new Date();
-                long time = date.getTime();
+                Long time = date.getTime();
                 qrValue = String.valueOf(time);
-                Log.d(TAG, "QR: " + qrValue);
+
                 saveToDb(qrValue);
 
                 intent1.putExtra("QrValue",qrValue);
-            }else {
-                Log.d(TAG, "QR: " + qrValue);
-                intent1.putExtra("QrValue",qrValue);
             }
+
+            intent1.putExtra("QrValue",qrValue);
             startActivity(intent1);
         });
 
     }
 
     private void saveToDb(String qrValue) {
-        //        Getting total current sessions
+        // Set current session to active
         Map<String, Object> session = new HashMap<>();
         session.put("Active",true);
-        db.collection("classes/"+course+"/Subjects/" +id+ "/Attendance")
+
+        db.collection("classes/"+course+"/Subjects")
+                .document(id)
+                .collection("Attendance")
                 .document(qrValue)
-                .set(session);
+                .set(session, SetOptions.merge())
+                .addOnCompleteListener(task -> Toast.makeText(this, "Complete", Toast.LENGTH_SHORT).show());
+
     }
 }
