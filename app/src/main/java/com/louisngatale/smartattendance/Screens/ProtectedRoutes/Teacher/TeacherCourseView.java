@@ -52,48 +52,16 @@ public class TeacherCourseView extends AppCompatActivity {
         if (null != intent){
             id = intent.getStringExtra("Id");
             course = intent.getStringExtra("Course");
+
+            Log.d(TAG, "onCreate: "+id);
+            Log.d(TAG, "onCreate: "+course);
         }
 
         // Getting total current sessions
-        db.collection("classes/"+course+"/Subjects/"+id+"/Attendance")
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    QuerySnapshot snapshot = task.getResult();
-                    if (snapshot != null){
-                        if (snapshot.isEmpty()){
-                            currentSessions.setText("0");
-                        }else {
-                            snapshot.getDocuments().forEach(item -> {
-
-                                current++;
-                            });
-                            currentSessions.setText(String.valueOf(current));
-                            Log.d(TAG, "onComplete: current " + current);
-                        }
-                    }
-                }
-            });
+        getSessions();
 
         // Getting total students
-        db.collection("classes/"+course+"/Students")
-            .get()
-            .addOnCompleteListener(task -> {
-                QuerySnapshot snapshot = task.getResult();
-                if (snapshot != null){
-                    if (snapshot.isEmpty()){
-                        currentSessions.setText("0");
-                    }else {
-                        snapshot.getDocuments().forEach(item -> {
-                            students++;
-                        });
-                        Log.d(TAG, "onComplete: students " + students);
-
-                        totalStudents.setText(String.valueOf(students));
-                    }
-                }
-            });
+        getTotalStudents();
 
         viewStudents.setOnClickListener(v -> {
             Intent view_students = new Intent(TeacherCourseView.this,ViewStudents.class);
@@ -117,6 +85,49 @@ public class TeacherCourseView extends AppCompatActivity {
             intent1.putExtra("QrValue",qrValue);
             startActivity(intent1);
         });
+    }
+
+    private void getTotalStudents() {
+        db.collection("classes/"+course+"/Students")
+            .get()
+            .addOnCompleteListener(task -> {
+                QuerySnapshot snapshot = task.getResult();
+                if (snapshot != null){
+                    if (snapshot.isEmpty()){
+                        currentSessions.setText("0");
+                    }else {
+                        snapshot.getDocuments().forEach(item -> {
+                            students++;
+                        });
+                        Log.d(TAG, "onComplete: students " + students);
+
+                        totalStudents.setText(String.valueOf(students));
+                    }
+                }
+            });
+    }
+
+    private void getSessions() {
+        db.collection("classes/"+course+"/Subjects/"+id+"/Attendance")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    QuerySnapshot snapshot = task.getResult();
+                    if (snapshot != null){
+                        if (snapshot.isEmpty()){
+                            currentSessions.setText("0");
+                        }else {
+                            snapshot.getDocuments().forEach(item -> {
+
+                                current++;
+                            });
+                            currentSessions.setText(String.valueOf(current));
+                            Log.d(TAG, "onComplete: current " + current);
+                        }
+                    }
+                }
+            });
     }
 
     private void saveToDb(String qrValue) {

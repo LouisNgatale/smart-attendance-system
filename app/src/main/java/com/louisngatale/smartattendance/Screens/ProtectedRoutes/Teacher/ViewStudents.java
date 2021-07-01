@@ -1,6 +1,5 @@
 package com.louisngatale.smartattendance.Screens.ProtectedRoutes.Teacher;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,22 +8,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.louisngatale.smartattendance.Adapter.CoursesAdapter;
 import com.louisngatale.smartattendance.Adapter.StudentsAdapter;
-import com.louisngatale.smartattendance.Data.Courses;
-import com.louisngatale.smartattendance.Data.Students;
+import com.louisngatale.smartattendance.Data.Student;
 import com.louisngatale.smartattendance.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ViewStudents extends AppCompatActivity {
     private static final String TAG = "StudentsView";
@@ -32,16 +29,18 @@ public class ViewStudents extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private RecyclerView students_rec_view;
-    private ArrayList<String> student_ids  = new ArrayList<>();
-    private Query query;
-    private Map<String, String> students;
     private StudentsAdapter adapter;
+    private ArrayList<Student> items;
+    private HashMap<String,Integer> all_students;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_students);
         students_rec_view = findViewById(R.id.students_rec_view);
+        all_students = new HashMap<>();
+        db = FirebaseFirestore.getInstance();
+        items = new ArrayList<Student>();
 
         Intent intent = getIntent();
 
@@ -50,33 +49,70 @@ public class ViewStudents extends AppCompatActivity {
             course = intent.getStringExtra("Course");
         }
 
-        // Getting total students
-        db.collection("classes/"+course+"/Students")
+        getTotalAttended();
+    }
+
+    // [START] Get total sessions attended by each student
+    private void getTotalAttended() {
+        // Get Students
+
+        // Get Attendance
+
+        db.collection("classes/"+course+"/Subjects/"+id+"/Attendance")
             .get()
             .addOnCompleteListener(task -> {
                 QuerySnapshot snapshot = task.getResult();
-                if (snapshot != null){
-                    snapshot.getDocuments().forEach(item -> {
-                        student_ids.add(item.getId());
-                    });
 
-                    // Create query
-                    query = db.collection("users").whereIn("UID",student_ids);
+                // CHECK IF THERE ARE VALUES
+                if (snapshot != null){
+                    // [START #1] Search each active session
+                    snapshot.getDocuments().forEach(item -> {
+
+                        // [START #2] Enter attendees collection for current session
+                        item.getReference().collection("attendees").get().addOnCompleteListener(task1 -> {
+                            // Check if task was successful in getting all attendees
+                            if (task1.isSuccessful()){
+                                // Get all students who are in the attendance list
+                                List<DocumentSnapshot> students = Objects.requireNonNull(task1.getResult()).getDocuments();
+
+                                // [START #3] For each student update attendance count in the hashmap
+                                students.forEach(student -> {
+                                    String student_id = student.getId();
+
+                                    // Increase attendance count of student in the hashmap
+                                    if (all_students.containsKey(student_id))
+                                        all_students.put(student_id, all_students.get(student_id) + 1);
+                                    else
+                                        all_students.put(student_id,1);
+                                });
+                                // [END #3] For each student update attendance count in the hashmap
+                            }
+                        }).addOnSuccessListener(queryDocumentSnapshots -> {
+                            Log.d(TAG, "Start here first");
+                            // Using for-each loop
+                            all_students.forEach((k,v) -> {
+                                items.add(new Student(k,v));
+                            });
+
+                            initiateViews();
+                        });
+                        // [END #2] Enter attendees collection for current session
+                    });
+                    // [END #1] Search each active session
+                }else {
+                    Log.d(TAG, "onComplete: No attendance yet");
                 }
             });
-
-        query.get().addOnCompleteListener(task -> Log.d(TAG, "onComplete: " + task.getResult().getDocuments().size()));
-
-        // Configure the adapter options
-        FirestoreRecyclerOptions<Students> options =
-                new FirestoreRecyclerOptions.Builder<Students>()
-                        .setQuery(query,Students.class)
-                        .build();
-
-        adapter = new StudentsAdapter(options, this);
-
-        students_rec_view.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        students_rec_view.setAdapter(adapter);
-        students_rec_view.setNestedScrollingEnabled(false);
     }
+
+    private void initiateViews() {
+        adapter = new StudentsAdapter(this, items);
+
+        Log.d(TAG, "initiateViews: " + adapter.getItemCount());
+        students_rec_view.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        students_rec_view.setNestedScrollingEnabled(false);
+        students_rec_view.setAdapter(adapter);
+
+    }
+    // [END] Get total sessions attended by each student
 }
