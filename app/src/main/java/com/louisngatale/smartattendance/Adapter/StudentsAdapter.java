@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.louisngatale.smartattendance.Data.Student;
 import com.louisngatale.smartattendance.R;
 
@@ -22,6 +24,7 @@ public class StudentsAdapter  extends RecyclerView.Adapter<StudentsAdapter.ViewH
     private static final String TAG = "Adapter";
     private Context mContext;
     ArrayList<Student> all_students;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public StudentsAdapter(Context mContext, ArrayList<Student> all_students) {
         this.mContext = mContext;
@@ -39,9 +42,20 @@ public class StudentsAdapter  extends RecyclerView.Adapter<StudentsAdapter.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull StudentsAdapter.ViewHolder holder, int position) {
-        holder.student_name.setText(all_students.get(position).getId().toString());
-        holder.student_percentage.setText(all_students.get(position).getPercentage().toString());
-        Log.d(TAG, "Items " + all_students.toString());
+        String id = all_students.get(position).getId();
+
+        db.collection("users")
+                .document(id)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot result = task.getResult();
+
+                        holder.student_name.setText(result.get("fullName").toString());
+                        String percentage = "Total attended: " + all_students.get(position).getPercentage().toString();
+                        holder.student_percentage.setText(percentage);
+                    }
+                });
     }
 
     @Override
