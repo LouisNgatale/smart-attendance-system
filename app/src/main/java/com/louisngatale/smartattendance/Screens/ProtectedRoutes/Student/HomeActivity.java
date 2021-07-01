@@ -43,7 +43,8 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-//        If user is not authenticated send to welcome activity
+
+        // If user is not authenticated send to welcome activity
         if (currentUser == null){
             Intent loginIntent = new Intent(HomeActivity.this, WelcomeActivity.class);
             startActivity(loginIntent);
@@ -67,11 +68,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-
         initializeViews();
         retrieveFromFirestore();
-
     }
 
     private void initializeViews() {
@@ -121,7 +119,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private void retrieveCourses() {
         //        Create query
-
         Query query =
                 db.collection("/classes/"+course+"/Subjects");
 
@@ -141,7 +138,7 @@ public class HomeActivity extends AppCompatActivity {
             String id = documentSnapshot.getId();
 
             Intent viewItem = new Intent(this, CourseView.class);
-            viewItem.putExtra("Id", id);
+            viewItem.putExtra("Id", id.trim());
             viewItem.putExtra("Course", course);
             startActivity(viewItem);
         });

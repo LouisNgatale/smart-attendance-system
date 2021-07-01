@@ -30,7 +30,7 @@ public class TeacherCourseView extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
     String course;
-    Button scan;
+    Button scan,viewStudents;
     TextView totalStudents, currentSessions, totalSessions;
     int current = 0,students = 0;
     String qrValue =null;
@@ -44,6 +44,7 @@ public class TeacherCourseView extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         totalStudents = findViewById(R.id.totalStudents);
         currentSessions = findViewById(R.id.currentSessions);
+        viewStudents = findViewById(R.id.viewStudents);
         totalSessions = findViewById(R.id.totalSessions);
         scan = findViewById(R.id.scanId);
 
@@ -53,55 +54,53 @@ public class TeacherCourseView extends AppCompatActivity {
             course = intent.getStringExtra("Course");
         }
 
-//        Getting total current sessions
+        // Getting total current sessions
         db.collection("classes/"+course+"/Subjects/"+id+"/Attendance")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        QuerySnapshot snapshot = task.getResult();
-                        Log.d(TAG, "onComplete: task");
-                        if (snapshot != null){
-                            if (snapshot.isEmpty()){
-                                currentSessions.setText("0");
-                            }else {
-                                snapshot.getDocuments().forEach(item -> {
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    QuerySnapshot snapshot = task.getResult();
+                    if (snapshot != null){
+                        if (snapshot.isEmpty()){
+                            currentSessions.setText("0");
+                        }else {
+                            snapshot.getDocuments().forEach(item -> {
 
-                                    current++;
-                                });
-                                currentSessions.setText(String.valueOf(current));
-                                Log.d(TAG, "onComplete: current " + current);
-                            }
+                                current++;
+                            });
+                            currentSessions.setText(String.valueOf(current));
+                            Log.d(TAG, "onComplete: current " + current);
                         }
                     }
-                });
+                }
+            });
 
-        //        Getting total students
+        // Getting total students
         db.collection("classes/"+course+"/Students")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        QuerySnapshot snapshot = task.getResult();
-                        Log.d(TAG, "onComplete: task");
+            .get()
+            .addOnCompleteListener(task -> {
+                QuerySnapshot snapshot = task.getResult();
+                if (snapshot != null){
+                    if (snapshot.isEmpty()){
+                        currentSessions.setText("0");
+                    }else {
+                        snapshot.getDocuments().forEach(item -> {
+                            students++;
+                        });
+                        Log.d(TAG, "onComplete: students " + students);
 
-                        if (snapshot != null){
-                            if (snapshot.isEmpty()){
-                                currentSessions.setText("0");
-                            }else {
-                                snapshot.getDocuments().forEach(item -> {
-                                    students++;
-                                });
-                                Log.d(TAG, "onComplete: students " + students);
-
-                                totalStudents.setText(String.valueOf(students));
-                            }
-                        }
+                        totalStudents.setText(String.valueOf(students));
                     }
-                });
+                }
+            });
 
-
-        Log.d(TAG, "QR: " + qrValue);
+        viewStudents.setOnClickListener(v -> {
+            Intent view_students = new Intent(TeacherCourseView.this,ViewStudents.class);
+            view_students.putExtra("Id", id.trim());
+            view_students.putExtra("Course", course);
+            startActivity(view_students);
+        });
 
         scan.setOnClickListener(v -> {
             Intent intent1 = new Intent(TeacherCourseView.this, QrCodeGenerator.class);
@@ -118,7 +117,6 @@ public class TeacherCourseView extends AppCompatActivity {
             intent1.putExtra("QrValue",qrValue);
             startActivity(intent1);
         });
-
     }
 
     private void saveToDb(String qrValue) {
@@ -127,11 +125,10 @@ public class TeacherCourseView extends AppCompatActivity {
         session.put("Active",true);
 
         db.collection("classes/"+course+"/Subjects")
-                .document(id)
-                .collection("Attendance")
-                .document(qrValue)
-                .set(session, SetOptions.merge())
-                .addOnCompleteListener(task -> Toast.makeText(this, "Complete", Toast.LENGTH_SHORT).show());
-
+            .document(id)
+            .collection("Attendance")
+            .document(qrValue)
+            .set(session, SetOptions.merge())
+            .addOnCompleteListener(task -> Toast.makeText(this, "Complete", Toast.LENGTH_SHORT).show());
     }
 }

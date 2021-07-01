@@ -77,13 +77,15 @@ public class CourseView extends AppCompatActivity {
 
                             }
                         }else {
-                                Log.d(TAG, "onComplete: No attendance yet");
+                            Log.d(TAG, "onComplete: No attendance yet");
                         }
                     }
                 });
 
         scan.setOnClickListener(v -> {
             Intent intent1 = new Intent(CourseView.this,ScanAttendance.class);
+            intent1.putExtra("Id",id);
+            intent1.putExtra("Course",course);
             startActivity(intent1);
         });
     }

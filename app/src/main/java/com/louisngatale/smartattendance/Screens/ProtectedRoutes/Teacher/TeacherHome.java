@@ -97,13 +97,11 @@ public class TeacherHome extends AppCompatActivity {
     }
 
     private void retrieveCourses() {
-        //        Create query
-
+        // Create query
         String uid = mAuth.getCurrentUser().getUid();
 
         Query query =
                 db.collection("/users/"+uid+"/Subjects");
-
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -112,7 +110,7 @@ public class TeacherHome extends AppCompatActivity {
             }
         });
 
-        //        Configure the adapter options
+        // Configure the adapter options
         FirestoreRecyclerOptions<Courses> options =
                 new FirestoreRecyclerOptions.Builder<Courses>()
                         .setQuery(query,Courses.class)
@@ -128,29 +126,24 @@ public class TeacherHome extends AppCompatActivity {
             String id = documentSnapshot.getId();
 
             db.collection("users/"+uid+"/Subjects")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            QuerySnapshot snapshot = task.getResult();
-                            Log.d(TAG, "onComplete: task");
-                            if (snapshot != null){
-                                if (!snapshot.isEmpty()) {
-                                    snapshot.getDocuments().forEach(item -> {
-                                        if (item.getId().equals(id)){
-                                            String courseId = String.valueOf(item.get("course"));
-                                            Intent viewItem = new Intent(TeacherHome.this, TeacherCourseView.class);
-                                            viewItem.putExtra("Id", id.trim());
-                                            viewItem.putExtra("Course", courseId);
-                                            startActivity(viewItem);
-                                        }
-                                    });
+                .get()
+                .addOnCompleteListener(task -> {
+                    QuerySnapshot snapshot = task.getResult();
+                    Log.d(TAG, "onComplete: task");
+                    if (snapshot != null){
+                        if (!snapshot.isEmpty()) {
+                            snapshot.getDocuments().forEach(item -> {
+                                if (item.getId().equals(id)){
+                                    String courseId = String.valueOf(item.get("course"));
+                                    Intent viewItem = new Intent(TeacherHome.this, TeacherCourseView.class);
+                                    viewItem.putExtra("Id", id.trim());
+                                    viewItem.putExtra("Course", courseId);
+                                    startActivity(viewItem);
                                 }
-                            }
+                            });
                         }
-                    });
-
-
+                    }
+                });
         });
 
         adapter.startListening();

@@ -48,7 +48,6 @@ public class RegisterActivity extends AppCompatActivity {
             fullName = intent.getStringExtra("Full Name");
             id = intent.getStringExtra("Id");
             course = intent.getStringExtra("Course");
-
         }
 
         signUp.setOnClickListener(v ->{
@@ -85,7 +84,6 @@ public class RegisterActivity extends AppCompatActivity {
             createNewUser(authResult, uid);
             AddToDatabase(authResult);
 
-
         }).addOnFailureListener(failureResult -> {
             Log.d(TAG, "onCreate: " + failureResult.getMessage());
         });
@@ -112,15 +110,15 @@ public class RegisterActivity extends AppCompatActivity {
         String uid = authResult.getUser().getUid();
         student.put("UID", uid);
         db.collection("classes/"+course+"/Students")
-                .document(uid)
-                .set(student)
-                .addOnSuccessListener(success -> {
-                    Intent homeIntent = new Intent(RegisterActivity.this, HomeActivity.class);
-                    progressIndicator.setVisibility(View.GONE);
-                    startActivity(homeIntent);
-                }).addOnFailureListener(failure -> {
-                    progressIndicator.setVisibility(View.GONE);
-            Toast.makeText(this, "There was an error creating user", Toast.LENGTH_SHORT).show();
+            .document(uid)
+            .set(student)
+            .addOnSuccessListener(success -> {
+                Intent homeIntent = new Intent(RegisterActivity.this, HomeActivity.class);
+                progressIndicator.setVisibility(View.GONE);
+                startActivity(homeIntent);
+            }).addOnFailureListener(failure -> {
+                progressIndicator.setVisibility(View.GONE);
+        Toast.makeText(this, "There was an error creating user", Toast.LENGTH_SHORT).show();
         });
     }
 }
