@@ -51,36 +51,33 @@ public class CourseView extends AppCompatActivity {
         }
 
         db.collection("classes/"+course+"/Subjects/"+id+"/Attendance")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        QuerySnapshot snapshot = task.getResult();
-                        if (snapshot != null){
-                            if (snapshot.isEmpty()){
-                                totalAttended.setText("0");
-                                totalSessions.setText("0");
-                                percentage.setText("0");
-                            }else {
-                                snapshot.getDocuments().forEach(item -> {
-                                    String result = String.valueOf(item.get(uid));
-                                    if (result.equals("true")){
-                                        count++;
-                                    }
-                                    days++;
-                                    Log.d(TAG, "onComplete: " + count);
-                                });
-                                int perCent = (count / days) * 100;
-                                totalAttended.setText(String.valueOf(count));
-                                totalSessions.setText(String.valueOf(days));
-                                percentage.setText(String.valueOf(perCent));
-
+            .get()
+            .addOnCompleteListener(task -> {
+                QuerySnapshot snapshot = task.getResult();
+                if (snapshot != null){
+                    if (snapshot.isEmpty()){
+                        totalAttended.setText("0");
+                        totalSessions.setText("0");
+                        percentage.setText("0");
+                    }else {
+                        snapshot.getDocuments().forEach(item -> {
+                            String result = String.valueOf(item.get(uid));
+                            if (result.equals("true")){
+                                count++;
                             }
-                        }else {
-                            Log.d(TAG, "onComplete: No attendance yet");
-                        }
+                            days++;
+                            Log.d(TAG, "onComplete: " + count);
+                        });
+                        int perCent = (count / days) * 100;
+                        totalAttended.setText(String.valueOf(count));
+                        totalSessions.setText(String.valueOf(days));
+                        percentage.setText(String.valueOf(perCent));
+
                     }
-                });
+                }else {
+                    Log.d(TAG, "onComplete: No attendance yet");
+                }
+            });
 
         scan.setOnClickListener(v -> {
             Intent intent1 = new Intent(CourseView.this,ScanAttendance.class);

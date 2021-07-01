@@ -41,8 +41,6 @@ public class ScanAttendance extends AppCompatActivity {
         if (null != intent){
             id = intent.getStringExtra("Id");
             course = intent.getStringExtra("Course");
-            Log.d(TAG, course);
-
         }
 
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
@@ -61,7 +59,8 @@ public class ScanAttendance extends AppCompatActivity {
                 db.collection("classes/"+course+"/Subjects/"+id+"/Attendance/")
                     .document(qrValue.trim())
                     .collection("attendees")
-                    .add(session)
+                    .document(mAuth.getUid())
+                    .set(session)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
                             Toast.makeText(ScanAttendance.this, "Session registered", Toast.LENGTH_SHORT).show();
