@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartAttendance">
-        <activity android:name=".Screens.ProtectedRoutes.Teacher.ScanStudentid"></activity>
+        <activity android:name=".Screens.ProtectedRoutes.Teacher.ScanStudentId"></activity>
         <activity android:name=".Screens.ProtectedRoutes.Teacher.ViewStudents" />
         <activity android:name=".Screens.ProtectedRoutes.Teacher.QrCodeGenerator" />
         <activity android:name=".Screens.ProtectedRoutes.Teacher.TeacherCourseView" />

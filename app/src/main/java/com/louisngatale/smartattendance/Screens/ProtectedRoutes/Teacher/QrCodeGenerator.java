@@ -45,6 +45,5 @@ public class QrCodeGenerator extends AppCompatActivity {
         back.setOnClickListener(v -> {
             finish();
         });
-
     }
 }

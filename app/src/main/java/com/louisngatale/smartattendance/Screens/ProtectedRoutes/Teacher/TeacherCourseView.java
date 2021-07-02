@@ -88,10 +88,10 @@ public class TeacherCourseView extends AppCompatActivity {
         });
 
         scan_student_id.setOnClickListener(v -> {
-            Intent scan_id_intent = new Intent(TeacherCourseView.this, ScanStudentId.class);
-
             if (qrValue != null){
+                Intent scan_id_intent = new Intent(TeacherCourseView.this, ScanStudentId.class);
                 scan_id_intent.putExtra("QrValue",qrValue);
+                scan_id_intent.putExtra("Course",course.trim());
                 startActivity(scan_id_intent);
             }
 

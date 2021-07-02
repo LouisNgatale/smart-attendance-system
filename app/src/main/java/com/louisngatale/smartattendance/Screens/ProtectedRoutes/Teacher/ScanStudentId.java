@@ -46,8 +46,10 @@ public class ScanStudentId extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         Intent intent = getIntent();
+
         if (null != intent){
-            qrValue = intent.getStringExtra("QrValue");
+            qrValue = intent.getStringExtra("QrValue").trim();
+            course = intent.getStringExtra("Course").trim();
         }
 
         mCodeScanner.setDecodeCallback(result -> runOnUiThread(new Runnable() {
@@ -61,7 +63,7 @@ public class ScanStudentId extends AppCompatActivity {
 
                 fullName = getName(NAME_PATTERN);
                 id = getId(ID_PATTERN);
-                course = getCourse(COURSE_PATTERN);
+//                course = getCourse(COURSE_PATTERN);
 
                 findStudent(id);
             }
@@ -130,7 +132,7 @@ public class ScanStudentId extends AppCompatActivity {
         db.collection("classes/"+course+"/Subjects/"+id+"/Attendance/")
                 .document(qrValue.trim())
                 .collection("attendees")
-                .document(mAuth.getUid())
+                .document(id)
                 .set(session)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
