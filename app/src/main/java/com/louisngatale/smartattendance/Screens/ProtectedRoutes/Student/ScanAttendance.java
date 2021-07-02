@@ -55,7 +55,6 @@ public class ScanAttendance extends AppCompatActivity {
 
                 String qrValue = result.getText();
 
-
                 db.collection("classes/"+course+"/Subjects/"+id+"/Attendance/")
                     .document(qrValue.trim())
                     .collection("attendees")

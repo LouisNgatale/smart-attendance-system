@@ -108,7 +108,6 @@ public class ViewStudents extends AppCompatActivity {
     private void initiateViews() {
         adapter = new StudentsAdapter(this, items);
 
-        Log.d(TAG, "initiateViews: " + adapter.getItemCount());
         students_rec_view.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         students_rec_view.setNestedScrollingEnabled(false);
         students_rec_view.setAdapter(adapter);

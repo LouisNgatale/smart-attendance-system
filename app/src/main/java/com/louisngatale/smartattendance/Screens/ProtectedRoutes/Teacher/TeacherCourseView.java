@@ -30,7 +30,7 @@ public class TeacherCourseView extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
     String course;
-    Button scan,viewStudents;
+    Button scan,viewStudents,scan_student_id;
     TextView totalStudents, currentSessions, totalSessions;
     int current = 0,students = 0;
     String qrValue =null;
@@ -45,6 +45,7 @@ public class TeacherCourseView extends AppCompatActivity {
         totalStudents = findViewById(R.id.totalStudents);
         currentSessions = findViewById(R.id.currentSessions);
         viewStudents = findViewById(R.id.viewStudents);
+        scan_student_id = findViewById(R.id.scan_student_id);
         totalSessions = findViewById(R.id.totalSessions);
         scan = findViewById(R.id.scanId);
 
@@ -84,6 +85,18 @@ public class TeacherCourseView extends AppCompatActivity {
 
             intent1.putExtra("QrValue",qrValue);
             startActivity(intent1);
+        });
+
+        scan_student_id.setOnClickListener(v -> {
+            Intent scan_id_intent = new Intent(TeacherCourseView.this, ScanStudentId.class);
+
+            if (qrValue != null){
+                scan_id_intent.putExtra("QrValue",qrValue);
+                startActivity(scan_id_intent);
+            }
+
+            Toast.makeText(this, "Generate QR Code first", Toast.LENGTH_SHORT).show();
+
         });
     }
 
