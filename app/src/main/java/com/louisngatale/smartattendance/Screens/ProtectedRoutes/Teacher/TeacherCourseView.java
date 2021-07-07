@@ -92,10 +92,12 @@ public class TeacherCourseView extends AppCompatActivity {
                 Intent scan_id_intent = new Intent(TeacherCourseView.this, ScanStudentId.class);
                 scan_id_intent.putExtra("QrValue",qrValue);
                 scan_id_intent.putExtra("Course",course.trim());
+                scan_id_intent.putExtra("Subject",id.trim());
                 startActivity(scan_id_intent);
-            }
+            }else {
 
-            Toast.makeText(this, "Generate QR Code first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Generate QR Code first", Toast.LENGTH_SHORT).show();
+            }
 
         });
     }

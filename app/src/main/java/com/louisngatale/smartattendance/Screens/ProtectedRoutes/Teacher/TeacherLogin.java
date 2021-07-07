@@ -44,6 +44,7 @@ public class TeacherLogin extends AppCompatActivity {
             String email = this.email.getText().toString();
             String pwd = password.getText().toString();
 
+            // TODO: Handle on wrong password stop loading the progress bar
             mAuth.signInWithEmailAndPassword(email,pwd).addOnSuccessListener(authResult -> {
                 String uid = authResult.getUser().getUid();
 

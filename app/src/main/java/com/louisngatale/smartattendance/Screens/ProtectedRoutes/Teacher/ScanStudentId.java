@@ -30,7 +30,7 @@ public class ScanStudentId extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
     private String qrValue;
-    String fullName,id,course;
+    String fullName,id,course,subject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,8 @@ public class ScanStudentId extends AppCompatActivity {
 
         if (null != intent){
             qrValue = intent.getStringExtra("QrValue").trim();
-            course = intent.getStringExtra("Course").trim();
+            course = intent.getStringExtra("Course");
+            subject = intent.getStringExtra("Subject");
         }
 
         mCodeScanner.setDecodeCallback(result -> runOnUiThread(new Runnable() {
@@ -61,8 +62,9 @@ public class ScanStudentId extends AppCompatActivity {
                 String NAME_PATTERN = "ID:.\\d+(.* )Course:";
                 String COURSE_PATTERN = "Course:.(.*) :";
 
+                // Regex for obtaining details from qr code
                 fullName = getName(NAME_PATTERN);
-                id = getId(ID_PATTERN);
+//                id = getId(ID_PATTERN);
 //                course = getCourse(COURSE_PATTERN);
 
                 findStudent(id);
@@ -95,6 +97,8 @@ public class ScanStudentId extends AppCompatActivity {
                 return null;
             }
 
+            // TODO: Get the course from the id card of the student
+
             private String getCourse(String COURSE_PATTERN) {
                 Pattern pattern = Pattern.compile(COURSE_PATTERN, Pattern.CASE_INSENSITIVE);
                 Matcher matcher = pattern.matcher(result.getText());
@@ -102,6 +106,8 @@ public class ScanStudentId extends AppCompatActivity {
                     String group = matcher.group();
                     return group.substring(group.indexOf(":") + 1, group.lastIndexOf(":") - 1);
                 }
+
+                // Handle null pointer exception
                 return null;
             }
         }));
@@ -109,6 +115,7 @@ public class ScanStudentId extends AppCompatActivity {
         scannerView.setOnClickListener(view -> mCodeScanner.startPreview());
     }
 
+    // Find student by id from the qr code
     private void findStudent(String id) {
         db.collection("users")
                 .whereEqualTo("schoolId",id)
@@ -119,28 +126,30 @@ public class ScanStudentId extends AppCompatActivity {
 
                         String id1 = first.get().getId();
 
-                        saveStudentSession(id);
+                        saveStudentSession(id1);
                     }
         });
     }
 
+    // Obtain student;s login id
     private void saveStudentSession(String id) {
-        // Set current session to active
+        // Set current  session to active
         Map<String, Object> session = new HashMap<>();
         session.put(id,true);
 
-        db.collection("classes/"+course+"/Subjects/"+id+"/Attendance/")
-                .document(qrValue.trim())
-                .collection("attendees")
-                .document(id)
-                .set(session)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        Toast.makeText(ScanStudentId.this, "Session registered", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }else {
-                        Toast.makeText(ScanStudentId .this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        // Scan students id and store in database
+        db.collection("classes/"+course+"/Subjects/"+subject+"/Attendance/")
+            .document(qrValue.trim())
+            .collection("attendees")
+            .document(id)
+            .set(session)
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    Toast.makeText(ScanStudentId.this, "Session registered", Toast.LENGTH_SHORT).show();
+                    finish();
+                }else {
+                    Toast.makeText(ScanStudentId .this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 }
