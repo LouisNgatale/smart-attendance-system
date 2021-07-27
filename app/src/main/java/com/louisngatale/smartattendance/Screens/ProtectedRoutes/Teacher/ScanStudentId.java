@@ -138,7 +138,7 @@ public class ScanStudentId extends AppCompatActivity {
         session.put(id,true);
 
         // Scan students id and store in database
-        db.collection("classes/"+course+"/Subjects/"+subject+"/Attendance/")
+        db.collection("classes/"+course+"/Subjects/"+subject.trim()+"/Attendance/")
             .document(qrValue.trim())
             .collection("attendees")
             .document(id)

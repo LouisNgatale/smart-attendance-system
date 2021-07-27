@@ -59,10 +59,11 @@ public class HomeActivity extends AppCompatActivity {
                 assert document != null;
                 if (document.exists()){
                     String role = document.getString("role");
-                    assert role != null;
-                    if (role.equals("Teacher")){
-                        Intent intent = new Intent(HomeActivity.this, TeacherHome.class);
-                        startActivity(intent);
+                    if(role != null){
+                        if (role.equals("Teacher")){
+                            Intent intent = new Intent(HomeActivity.this, TeacherHome.class);
+                            startActivity(intent);
+                        }
                     }
                 }
             }
